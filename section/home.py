@@ -1,6 +1,7 @@
 import streamlit as st
 
 # Title and Author Section
+st.image("./images/aboutmodelcover.jpg")
 st.title("Code-switched Tagalog-English Text-Image Multimodal Sarcasm Detection Using Attention Mechanism for Inter-modal Incongruity Modeling")
 st.caption("**Authors**: Kim Montana, Genesis Lovino, Monica Zapanta, Bien Gavino, Lander Pardilla")
 st.divider()

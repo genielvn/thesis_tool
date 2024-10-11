@@ -75,7 +75,7 @@ user_pages = [home, dataset_profile, about_model, authors, run_model]
 admin_pages = [admin_train]
 
 
-st.logo("images/headerlogo.png", icon_image="images/resrobertaicon.jpg")
+st.logo("images/h1.png",size="large")
 
 page_dict = {}
 

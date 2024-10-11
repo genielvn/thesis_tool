@@ -1,25 +1,43 @@
 import streamlit as st
-
+st.image("./images/aboutmodelcover.jpg")
 st.title("About The Model: Att-ResRoBERTa")
 st.divider()
 
-# Introduction Section
-st.subheader("🌟 Introduction")
-st.write("""
-    **Att-ResRoBERTa** is an advanced multimodal model designed for detecting **sarcasm** in code-switched **Tagalog-English** (Taglish) content. 
-    By leveraging the strengths of both **text** and **image modalities**, the model aims to understand and interpret the nuanced expressions of sarcasm in 
-    combined text-image pairs.
-""")
+
 
 # Problem Statement Section
-st.subheader("❓ Problem Statement")
+st.subheader("🌟 Introduction")
 st.write("""
     Detecting sarcasm is a challenging task, especially in **code-switched languages** where the interplay between languages adds layers of complexity. 
-    This task becomes even more intricate when both **textual** and **visual cues** are involved, as the model must discern incongruities between the two modalities.
+    This task becomes even more intricate when both **textual** and **visual cues** are involved, as the model must discern **incongruities** between the two modalities.
+
+    Despite remarkable progress made in **multi-modal sarcasm detection**, to the best of our knowledge, existing studies (Cai, Cai, & Wan, 2019) (Fang, Liang, & Xiang, 2024) (Liang B. , et al., 2022) (Liu, Wang, & Li, 2022) (Pan, Lin, Fu, Qi, & Wang, 2020) (Xu, Zeng, & Mao, 2020) tend to implement it in :blue-background[**high resource languages like English**]. However, in social media posts, there are a huge number of **Filipino users** that use **code-switching text**, particularly **Tagalog-English** text as their medium. **Code-switching** is a term that alternates the use of two or more languages in a single conversation or text (Morisson, 2024). 
+
+    :blue-background[**Low-resource languages**] like **Filipino** are :blue-background[**suffering from the lack of datasets and pre-trained models**]. The models we usually use can expose hidden weaknesses and the model’s true capability when datasets from low-resource languages are used (Cruz & Cheng, 2020). :blue-background[**To give models some improvements, more datasets must be created to train it**]. 
+
+    - Hence, we will be proposing a novel **Att-ResRoBERTa** to cater to the **multimodal Sarcasm Detection** in code-switched Tagalog-English with text-image pairs dataset in Tagalog-English. 
+    - We will be utilizing the model architecture of (Pan, Lin, Fu, Qi, & Wang, 2020) that draws support from the **self-attention mechanism** to model the **incongruity** between text and image, using **query**, **key**, **value**, and modifying it by removing the **intra-modal incongruity** between text and **hashtag** since hashtags can cause bias (Qin, et al., 2023). 
+    - Afterwards, fine-tuning the **XLM-RoBERTa** will be done for the **multimodal sarcasm detection task**, a variant of the **BERT model**, that is capable of handling code-switching within multiple languages.
 """)
+
+# Introduction Section
+st.subheader("❓ Problem Statement")
+st.write("""
+1. What is the proposed **Att-ResRoBERTa** model's performance in detecting **code-switched Tagalog-English Multimodal Sarcasm** in text-image?
+    
+    a. **Precision**  
+    b. **Recall**  
+    c. **F-Measure**  
+    d. **Accuracy**  
+
+2. What is the significant difference between the **BERT-based architecture model** by (Pan, Lin, Fu, Qi, & Wang, 2020) and the proposed **Att-ResRoBERTa** model's performance in detecting **Multimodal Sarcasm** in **Code-Switched Tagalog-English** contents?
+""")
+
+
 
 # Model Architecture Section
 st.subheader("🛠️ Model Architecture")
+st.image("./images/system_arch.png")
 st.write("""
     The **Att-ResRoBERTa** model integrates the following key components:
     
