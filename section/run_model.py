@@ -36,7 +36,6 @@ if st.button("Run Model", use_container_width=True):
         st.warning("Both an image and text input are required to run the model.")
     else:
         test_model(txt, image, sarcastic)
-        st.success("Model submitted successfully! Running the Att-ResRoBERTa model...")
 
 # Divider for visual separation
 st.divider()

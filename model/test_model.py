@@ -133,8 +133,6 @@ def convert_mm_examples_to_features(examples, label_list, tokenizer, img):
         label_id = label_map[example.label]
 
         image = transform(img)  # 3*224*224
-        if ex_index % 1000 == 0:
-            st.info("processed image num: " + str(ex_index) + " **********")
 
         features.append(MMInputFeatures(input_ids=input_ids,
                                         input_mask=input_mask,
@@ -191,11 +189,6 @@ def test_model(text, image, label):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     n_gpu = torch.cuda.device_count()
     tokenizer = XLMRobertaTokenizer.from_pretrained("xlm-roberta-base", do_lower_case=True)
-
-    if torch.cuda.is_available():
-        st.info("************** Using: " + torch.cuda.get_device_name(0) + " ******************")
-    else:
-        st.info("************** Using CPU ******************")
 
     model = MsdBERT()
     net = torchvision.models.resnet152(pretrained=True)
@@ -267,7 +260,7 @@ def test_model(text, image, label):
     pred_label = np.argmax(pred_outputs, axis=-1)
 
     st.success(result)
-    st.success(pred_label)
+    st.success(f"The predicted label is {"non-sarcastic." if pred_label == 0 else "sarcastic."}")
     # fout_p = open(os.path.join(args.output_dir, "pred.txt"), 'w')
     # fout_t = open(os.path.join(args.output_dir, "true.txt"), 'w')
     # for i in range(len(pred_label)):
