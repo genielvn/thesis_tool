@@ -157,9 +157,9 @@ def convert_mm_examples_to_features(examples, label_list, tokenizer, img):
 def create_example(text, label):
         """Creates examples for the training and dev sets."""
         examples = []
-        for line in text:
-            lineLS = eval(line)
-            tmpLS = lineLS[1].split()
+        inputted_test_sample = [[1, text, label]]
+        for line in inputted_test_sample:
+            tmpLS = line[1].split()
             if "sarcasm" in tmpLS:
                 continue
             if "sarcastic" in tmpLS:
@@ -183,7 +183,7 @@ def create_example(text, label):
             if "exgag" in tmpLS:
                 continue
             img_id = 1
-            text = lineLS[1]
+            text = line[1]
             examples.append(InputExample(text=text, img_id=img_id, label=label))
         return examples
 
@@ -262,8 +262,12 @@ def test_model(text, image, label):
                 'recall': recall,
                 'f_score': F_score,
                 'train_loss': loss}
+                
 
     pred_label = np.argmax(pred_outputs, axis=-1)
+
+    st.success(result)
+    st.success(pred_label)
     # fout_p = open(os.path.join(args.output_dir, "pred.txt"), 'w')
     # fout_t = open(os.path.join(args.output_dir, "true.txt"), 'w')
     # for i in range(len(pred_label)):
