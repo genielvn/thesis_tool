@@ -1,4 +1,5 @@
 import streamlit as st
+from model.test_model import test_model
 from PIL import Image
 
 
@@ -27,11 +28,14 @@ with col2:
     )
     st.write(f"📝 **Character count**: {len(txt)} characters.")
 
+sarcastic = st.checkbox("Sarcastic")
+
 # Submit Button to Run the Model
 if st.button("Run Model", use_container_width=True):
     if uploaded_file is None or txt.strip() == "":
         st.warning("Both an image and text input are required to run the model.")
     else:
+        test_model(txt, image, sarcastic)
         st.success("Model submitted successfully! Running the Att-ResRoBERTa model...")
 
 # Divider for visual separation
