@@ -260,7 +260,7 @@ def test_model(text, image, label):
     pred_label = np.argmax(pred_outputs, axis=-1)
 
     st.success(result)
-    st.success(f"The predicted label is {"non-sarcastic." if pred_label == 0 else "sarcastic."}")
+    st.success(f'The predicted label is {"non-sarcastic." if pred_label == 0 else "sarcastic."}')
     # fout_p = open(os.path.join(args.output_dir, "pred.txt"), 'w')
     # fout_t = open(os.path.join(args.output_dir, "true.txt"), 'w')
     # for i in range(len(pred_label)):

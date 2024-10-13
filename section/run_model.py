@@ -2,8 +2,8 @@ import streamlit as st
 from model.test_model import test_model
 from PIL import Image
 
-
-st.title("Run Att-ResRoBERTa")
+st.image("./images/runmodelcover.jpg")
+st.title("🤖Att-ResRoBERTa")
 
 
 col1, col2 = st.columns(2)

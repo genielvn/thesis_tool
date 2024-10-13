@@ -1,6 +1,6 @@
 import streamlit as st
 st.image("./images/aboutmodelcover.jpg")
-st.title("About The Model: Att-ResRoBERTa")
+st.title("🤖 About The Model: Att-ResRoBERTa")
 st.divider()
 
 
