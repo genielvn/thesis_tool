@@ -185,9 +185,10 @@ def create_example(text, label):
             examples.append(InputExample(text=text, img_id=img_id, label=label))
         return examples
 
-def test_model(text, image, label):
+@st.cache_resource
+def start_model():
+    st.info("Starting Model...")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    n_gpu = torch.cuda.device_count()
     tokenizer = XLMRobertaTokenizer.from_pretrained("xlm-roberta-base", do_lower_case=True)
 
     model = MsdBERT()
@@ -200,7 +201,10 @@ def test_model(text, image, label):
     encoder.to(device)
     model.eval()
     encoder.eval()
+    
+    return device, model, encoder, tokenizer
 
+def test_model(device, model, encoder, tokenizer, text, image, label):
     test_examples = create_example(text, label)
     test_features = convert_mm_examples_to_features(test_examples, [0, 1], tokenizer, image)
     test_input_ids, test_input_mask, test_added_input_mask, test_img_feats, \
@@ -214,7 +218,6 @@ def test_model(text, image, label):
     nb_eval_steps, nb_eval_examples = 0, 0
     true_label_list = []
     pred_label_list = []
-
 
     for batch in test_dataloader:   
         batch = tuple(t.to(device) for t in batch)
@@ -259,7 +262,6 @@ def test_model(text, image, label):
 
     pred_label = np.argmax(pred_outputs, axis=-1)
 
-    st.success(result)
     st.success(f'The predicted label is {"non-sarcastic." if pred_label == 0 else "sarcastic."}')
     # fout_p = open(os.path.join(args.output_dir, "pred.txt"), 'w')
     # fout_t = open(os.path.join(args.output_dir, "true.txt"), 'w')

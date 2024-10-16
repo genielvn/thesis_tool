@@ -1,6 +1,10 @@
 import streamlit as st
-from model.test_model import test_model
+from model.test_model import test_model, start_model
 from PIL import Image
+
+# Store model inside running streamlit
+
+device, model, encoder, tokenizer = start_model()
 
 st.image("./images/runmodelcover.jpg")
 st.title("🤖Att-ResRoBERTa")
@@ -35,7 +39,7 @@ if st.button("Run Model", use_container_width=True):
     if uploaded_file is None or txt.strip() == "":
         st.warning("Both an image and text input are required to run the model.")
     else:
-        test_model(txt, image, sarcastic)
+        test_model(device, model, encoder, tokenizer, txt, image, sarcastic)
 
 # Divider for visual separation
 st.divider()
