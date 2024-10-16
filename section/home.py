@@ -25,7 +25,7 @@ st.subheader("⚙️ How It Works")
 st.markdown("""
 Our model architecture includes:
 - **Text Encoding**: Uses the **XLM-RoBERTa** model to process Taglish code-mixed text data.
-- **Image Processing**: Employs **ResNet-50** to analyze the accompanying image.
+- **Image Processing**: Employs **ResNet-152** to analyze the accompanying image.
 - **Multimodal Integration**: Utilizes an attention mechanism to detect mismatches or incongruities between the text and image, which are key signals for sarcasm detection.
 """)
 

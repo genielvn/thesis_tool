@@ -12,6 +12,7 @@ if "role" not in st.session_state:
 ROLES = [None,"Admin","User"]
 
 def login():
+    st.image("./images/runmodelcover.jpg")
     st.subheader("Att-ResRoberta: Code-Switched Tagalog-English Text-Image Multimodal Sarcasm Detection Using Attention Mechanism Intermodal Incongruity")
     st.header("Log In")
     role = st.selectbox("Choose your role", ROLES)
