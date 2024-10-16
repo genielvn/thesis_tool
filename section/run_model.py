@@ -1,6 +1,7 @@
 import streamlit as st
 from model.test_model import test_model, start_model
 from PIL import Image
+import pandas as pd
 
 # Store model inside running streamlit
 
@@ -45,5 +46,23 @@ if st.button("Run Model", use_container_width=True):
 st.divider()
 
 # Results Section
-st.header("Results")
+st.header("Predicted Result")
 st.write("Results will be displayed here after model execution.")
+
+st.divider()
+
+# Sample data for comparison
+data = {
+    'Metric': ['Precision', 'Recall', 'F-Measure', 'Accuracy'],
+    'Att-ResRoBERTa': [0.85, 0.80, 0.82, 0.88],  # Replace with actual values
+    'Att-ResBERT': [0.80, 0.75, 0.77, 0.85]      # Replace with actual values
+}
+
+# Create a DataFrame
+comparison_df = pd.DataFrame(data)
+
+# Streamlit headers
+st.header("Model Comparison")
+
+# Display comparison table
+st.dataframe(comparison_df, hide_index = True)  # Display the full table with both models

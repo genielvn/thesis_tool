@@ -63,17 +63,18 @@ st.write("""
     - **Transfer Learning**: Utilizes the pre-trained knowledge to improve performance on downstream tasks, such as sarcasm detection.
 """)
 
-# ResNet-50 Section
-st.subheader("🖼️ ResNet-50")
+# ResNet-152 Section
+st.subheader("🖼️ ResNet-152")
 st.write("""
-    **ResNet-50** is a deep convolutional neural network renowned for its effectiveness in image recognition tasks. Notable aspects include:
+    **ResNet-152** is a deeper convolutional neural network that builds upon the ResNet architecture for even more powerful image recognition capabilities. Key features include:
     
-    - **Residual Learning**: Introduces skip connections to help with the vanishing gradient problem, enabling the training of very deep networks.
+    - **Deeper Residual Learning**: Extends the residual learning mechanism of ResNet-50 with 152 layers, allowing it to learn more complex patterns and features without suffering from the vanishing gradient problem.
     
-    - **Feature Extraction**: Efficiently captures hierarchical features from images, making it adept at identifying visual cues related to sarcasm.
+    - **Enhanced Feature Extraction**: With additional layers, ResNet-152 is capable of capturing even finer hierarchical features from images, making it particularly well-suited for detecting subtle visual cues, such as those present in sarcastic images.
     
-    - **Wide Applicability**: Successfully applied in various domains, including object detection and image classification, enhancing the model's robustness in multimodal scenarios.
+    - **Improved Performance**: While being deeper than ResNet-50, it still retains efficiency in training due to residual connections, and has been widely applied in challenging domains like object detection and multimodal learning.
 """)
+
 
 # Training Data Section
 st.subheader("📚 Training Data")
