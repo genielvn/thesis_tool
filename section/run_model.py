@@ -1,10 +1,10 @@
 import streamlit as st
+import pandas as pd
+import json
 from model.test_model import test_model, start_model
 from PIL import Image
-import pandas as pd
 
 # Store model inside running streamlit
-
 device, model, encoder, tokenizer = start_model()
 
 st.image("./images/runmodelcover.jpg")
@@ -45,17 +45,17 @@ if st.button("Run Model", use_container_width=True):
 # Divider for visual separation
 st.divider()
 
-# Results Section
-st.header("Predicted Result")
-st.write("Results will be displayed here after model execution.")
+with open("./model/json/bert.json", 'r') as file:
+    bert_data = json.load(file)
 
-st.divider()
+with open("./model/json/roberta.json", 'r') as file:
+    roberta_data = json.load(file)
 
 # Sample data for comparison
 data = {
     'Metric': ['Precision', 'Recall', 'F-Measure', 'Accuracy'],
-    'Att-ResRoBERTa': [0.85, 0.80, 0.82, 0.88],  # Replace with actual values
-    'Att-ResBERT': [0.80, 0.75, 0.77, 0.85]      # Replace with actual values
+    'Att-ResRoBERTa': [roberta_data["precision"], roberta_data["recall"], roberta_data["f_score"], roberta_data["test_accuracy"]],  # Replace with actual values
+    'Att-BERT': [bert_data["precision"], bert_data["recall"], bert_data["f_score"], bert_data["test_accuracy"]],  # Replace with actual values
 }
 
 # Create a DataFrame
