@@ -58,11 +58,11 @@ data = {
     'Att-BERT': [bert_data["precision"], bert_data["recall"], bert_data["f_score"], bert_data["test_accuracy"]],  # Replace with actual values
 }
 
-# Create a DataFrame
-comparison_df = pd.DataFrame(data)
+# # Create a DataFrame
+# comparison_df = pd.DataFrame(data)
 
-# Streamlit headers
-st.header("Model Comparison")
+# # Streamlit headers
+# st.header("Model Comparison")
 
-# Display comparison table
-st.dataframe(comparison_df, hide_index = True)  # Display the full table with both models
+# # Display comparison table
+# st.dataframe(comparison_df, hide_index = True)  # Display the full table with both models
