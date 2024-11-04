@@ -10,7 +10,7 @@ from .models import MsdBERT
 from torchvision import transforms
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
 from .resnet_utils import myResnet
-from transformers import XLMRobertaTokenizer
+from transformers import BertTokenizer
 
 model_encoder = "./model/output/pytorch_encoder.bin"
 model_model = "./model/output/pytorch_model.bin"
@@ -189,7 +189,7 @@ def create_example(text, label):
 def start_model():
     st.info("Starting Model...")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    tokenizer = XLMRobertaTokenizer.from_pretrained("xlm-roberta-base", do_lower_case=True)
+    tokenizer = BertTokenizer.from_pretrained("bert-base-uncased", do_lower_case=True)
 
     model = MsdBERT()
     net = torchvision.models.resnet152(pretrained=True)

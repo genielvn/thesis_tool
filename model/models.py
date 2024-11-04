@@ -22,7 +22,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import CrossEntropyLoss
-from transformers import XLMRobertaModel
+from transformers import BertModel
 
 
 def gelu(x):
@@ -106,7 +106,7 @@ class BertCoAttention(nn.Module):
         # Take the dot product between "query" and "key" to get the raw attention scores.
         attention_scores = torch.matmul(query_layer, key_layer.transpose(-1, -2))  # b*12*75*49
         attention_scores = attention_scores / math.sqrt(self.attention_head_size)  # b*12*75*49
-        # Apply the attention mask is (precomputed for all layers in XLMRobertaModel forward() function)
+        # Apply the attention mask is (precomputed for all layers in BertModel forward() function)
         attention_scores = attention_scores + s2_attention_mask
         # atention_scores b*12*75*49
         # Normalize the attention scores to probabilities.
@@ -207,7 +207,7 @@ class BertCrossEncoder(nn.Module):
 class MsdBERT(nn.Module):
     def __init__(self):
         super(MsdBERT, self).__init__()
-        self.bert = XLMRobertaModel.from_pretrained('xlm-roberta-base')
+        self.bert = BertModel.from_pretrained('bert-base-uncased')
         self.tanh = nn.Tanh()
         self.text2image_attention = BertCrossEncoder()
         self.image_text_pooler = BertPooler()
@@ -255,8 +255,8 @@ class MsdBERT(nn.Module):
 class MsdBERT_withHash(nn.Module):
     def __init__(self):
         super(MsdBERT, self).__init__()
-        self.bert = XLMRobertaModel.from_pretrained('xlm-roberta-base')
-        self.hashtag_bert = XLMRobertaModel.from_pretrained('xlm-roberta-base')
+        self.bert = BertModel.from_pretrained('bert-base-uncased')
+        self.hashtag_bert = BertModel.from_pretrained('bert-base-uncased')
         self.tanh = nn.Tanh()
         self.text2image_attention = BertCrossEncoder()
         self.image_text_pooler = BertPooler()
@@ -322,7 +322,7 @@ class MsdBERT_withHash(nn.Module):
 class Res_BERT(nn.Module):
     def __init__(self):
         super(Res_BERT, self).__init__()
-        self.bert = XLMRobertaModel.from_pretrained('xlm-roberta-base')
+        self.bert = BertModel.from_pretrained('bert-base-uncased')
         self.dropout = nn.Dropout(0.1)
         self.classifier = nn.Linear(768, 2)
         self.vismap2text = nn.Linear(2048, 768)
@@ -350,7 +350,7 @@ class Res_BERT(nn.Module):
 class BertOnly(nn.Module):
     def __init__(self):
         super(BertOnly, self).__init__()
-        self.bert = XLMRobertaModel.from_pretrained('xlm-roberta-base')
+        self.bert = BertModel.from_pretrained('bert-base-uncased')
         self.dropout = nn.Dropout(0.1)
         self.classifier = nn.Linear(768, 2)
 
