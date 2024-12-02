@@ -11,6 +11,7 @@ from torchvision import transforms
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
 from .resnet_utils import myResnet
 from transformers import XLMRobertaTokenizer
+import torch.nn.functional as F
 
 model_encoder = "./model/output/pytorch_encoder.bin"
 model_model = "./model/output/pytorch_model.bin"
@@ -185,6 +186,17 @@ def create_example(text, label):
             examples.append(InputExample(text=text, img_id=img_id, label=label))
         return examples
 
+def get_sarcasm_confidence(pred_outputs):
+    # Convert logits to probabilities using softmax
+    probabilities = F.softmax(torch.tensor(pred_outputs), dim=1).numpy()
+    
+    # Extract sarcasm probability (index 1 in your case)
+    sarcasm_prob = probabilities[0][1]  # index 1 corresponds to "sarcastic" class
+    
+    # Convert to percentage
+    sarcasm_percentage = sarcasm_prob * 100
+    return sarcasm_percentage
+
 @st.cache_resource
 def start_model():
     st.info("Starting Model...")
@@ -261,7 +273,9 @@ def test_model(device, model, encoder, tokenizer, text, image, label):
                 
 
     pred_label = np.argmax(pred_outputs, axis=-1)
-
+    sarcasm_percentage = get_sarcasm_confidence(pred_outputs)
+    st.success(f"{pred_outputs}")
+    st.success(f"Sarcasm Confidence: {sarcasm_percentage}%")
     st.success(f'The predicted label is {"non-sarcastic." if pred_label == 0 else "sarcastic."}')
     # fout_p = open(os.path.join(args.output_dir, "pred.txt"), 'w')
     # fout_t = open(os.path.join(args.output_dir, "true.txt"), 'w')
