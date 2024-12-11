@@ -12,6 +12,9 @@ from torch.utils.data import TensorDataset, DataLoader, RandomSampler, Sequentia
 from .resnet_utils import myResnet
 from transformers import XLMRobertaTokenizer
 import torch.nn.functional as F
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
 
 model_encoder = "./model/output/pytorch_encoder.bin"
 model_model = "./model/output/pytorch_model.bin"
@@ -235,12 +238,15 @@ def test_model(device, model, encoder, tokenizer, text, image, label):
         batch = tuple(t.to(device) for t in batch)
         test_input_ids, test_input_mask, test_added_input_mask, test_img_feats, \
         test_hashtag_input_ids, test_hashtag_input_mask, test_label_ids = batch
+        
         imgs_f, img_mean, test_img_att = encoder(test_img_feats)
+        
         with torch.no_grad():
-            tmp_eval_loss = model(test_input_ids,test_img_att, test_input_mask, test_added_input_mask, \
+            tmp_eval_loss = model(test_input_ids, test_img_att, test_input_mask, test_added_input_mask, \
                                     test_hashtag_input_ids, test_hashtag_input_mask, test_label_ids)
             logits = model(test_input_ids, test_img_att, test_input_mask, test_added_input_mask, \
                             test_hashtag_input_ids, test_hashtag_input_mask)
+
         logits = logits.detach().cpu().numpy()
         label_ids = test_label_ids.to('cpu').numpy()
         true_label_list.append(label_ids)
@@ -271,28 +277,24 @@ def test_model(device, model, encoder, tokenizer, text, image, label):
                 'f_score': F_score,
                 'train_loss': loss}
                 
-
     pred_label = np.argmax(pred_outputs, axis=-1)
     sarcasm_percentage = get_sarcasm_confidence(pred_outputs)
     st.success(f"{pred_outputs}")
     st.success(f"Sarcasm Confidence: {sarcasm_percentage}%")
     st.success(f'The predicted label is {"non-sarcastic." if pred_label == 0 else "sarcastic."}')
-    # fout_p = open(os.path.join(args.output_dir, "pred.txt"), 'w')
-    # fout_t = open(os.path.join(args.output_dir, "true.txt"), 'w')
-    # for i in range(len(pred_label)):
-    #     attstr = str(pred_label[i])
-    #     fout_p.write(attstr + '\n')
-    # for i in range(len(true_label)):
-    #     attstr = str(true_label[i])
-    #     fout_t.write(attstr + '\n')
 
-    # fout_p.close()
-    # fout_t.close()
-
-    # output_eval_file = os.path.join(args.output_dir, "eval_results.txt")
-    # with open(output_eval_file, "w") as writer:
-    #     logger.info("***** Test Eval results *****")
-    #     for key in sorted(result.keys()):
-    #         logger.info("  %s = %s", key, str(result[key]))
-    #         writer.write("%s = %s\n" % (key, str(result[key])))
-
+    # Extract attention for visualization
+    # Assuming test_img_att is the attention weights (this is likely an output of encoder)
+    attention_weights = test_img_att.squeeze().detach().cpu().numpy()  # Detach from the computation graph
+    
+    # Reshape or normalize the attention to match image dimensions
+    heatmap_data = np.mean(attention_weights, axis=0).reshape(7, 7)  # Example of reducing to a 7x7 heatmap
+    
+    # Generate the heatmap
+    fig, ax = plt.subplots(figsize=(6, 4))
+    sns.heatmap(heatmap_data, cmap='viridis', ax=ax, cbar=True, square=True)
+    ax.set_title('Attention Heatmap')
+    
+    # Display the heatmap in Streamlit
+    st.pyplot(fig)
+    
