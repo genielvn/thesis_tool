@@ -200,6 +200,40 @@ def get_sarcasm_confidence(pred_outputs):
     sarcasm_percentage = sarcasm_prob * 100
     return sarcasm_percentage
 
+from scipy.ndimage import gaussian_filter
+
+def generate_attention_heatmap(image, attention_weights):
+    # Normalize attention weights to match the image dimensions
+    attention_weights = attention_weights.squeeze().detach().cpu().numpy()
+    heatmap_data = np.mean(attention_weights, axis=0)  # Reduce to 2D heatmap
+
+    # Apply Gaussian smoothing to smoothen out the heatmap
+    heatmap_data = gaussian_filter(heatmap_data, sigma=1)  # Adjust sigma for the level of smoothness
+
+    # Upsample the heatmap to match the image resolution
+    heatmap_resized = np.kron(heatmap_data, np.ones((32, 32)))  # Upsample 7x7 to 224x224
+    heatmap_resized = (heatmap_resized - heatmap_resized.min()) / (heatmap_resized.max() - heatmap_resized.min())
+    
+
+    # Resize image to 224x224
+    transform = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.ToTensor()
+    ])
+    resized_image = transform(image).permute(1, 2, 0).numpy()  # Convert to (H, W, C) format for plotting
+    
+    # Normalize the resized image to [0, 1] for blending
+    resized_image = (resized_image - resized_image.min()) / (resized_image.max() - resized_image.min())
+
+    # Create the plot
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.imshow(resized_image, aspect='auto', interpolation='nearest')  # Display the original image
+    sns.heatmap(heatmap_resized, cmap='viridis', alpha=0.8, ax=ax, cbar=True, square=False)  # Overlay smoothed heatmap
+    ax.set_title('Attention Heatmap')
+    ax.axis('off')  # This hides the axis
+    # Display the heatmap in Streamlit
+    st.pyplot(fig)
+     
 @st.cache_resource
 def start_model():
     st.info("Starting Model...")
@@ -283,18 +317,5 @@ def test_model(device, model, encoder, tokenizer, text, image, label):
     st.success(f"Sarcasm Confidence: {sarcasm_percentage}%")
     st.success(f'The predicted label is {"non-sarcastic." if pred_label == 0 else "sarcastic."}')
 
-    # Extract attention for visualization
-    # Assuming test_img_att is the attention weights (this is likely an output of encoder)
-    attention_weights = test_img_att.squeeze().detach().cpu().numpy()  # Detach from the computation graph
-    
-    # Reshape or normalize the attention to match image dimensions
-    heatmap_data = np.mean(attention_weights, axis=0).reshape(7, 7)  # Example of reducing to a 7x7 heatmap
-    
-    # Generate the heatmap
-    fig, ax = plt.subplots(figsize=(6, 4))
-    sns.heatmap(heatmap_data, cmap='viridis', ax=ax, cbar=True, square=True)
-    ax.set_title('Attention Heatmap')
-    
-    # Display the heatmap in Streamlit
-    st.pyplot(fig)
+    generate_attention_heatmap(image, test_img_att)
     
